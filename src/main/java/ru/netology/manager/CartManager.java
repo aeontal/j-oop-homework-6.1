@@ -1,43 +1,25 @@
 package ru.netology.manager;
 
-import ru.netology.domain.PurchaseItem;
+import ru.netology.domain.Product;
 import ru.netology.exceptions.NotFoundException;
-import ru.netology.repository.CartRepository;
+import ru.netology.repository.ProductRepository;
 
 public class CartManager {
-    private CartRepository repository;
+    ProductRepository repository = new ProductRepository();
 
-//при удалении проверяем наличие
-    public void removeById(int id) {
-        if (repository.findById(id) != null) {
-            repository.removeById(id);
+    public void deleteById(int id) throws NotFoundException {
+        if (repository.findById(id) == null) {
+            throw new NotFoundException("Element with id: " + id + " not found");
         } else {
-            throw new NotFoundException();
+            repository.removeById(id);
+            System.out.println("operation done");
         }
+
     }
 
-
-    public CartManager(CartRepository repository) {
-        this.repository = repository;
-    }
-
-    public void add(PurchaseItem item) {
-        repository.save(item);
-    }
-
-    public PurchaseItem[] getAll() {
-        PurchaseItem[] items = repository.findAll();
-        PurchaseItem[] result = new PurchaseItem[items.length];
-        for (int i = 0; i < result.length; i++) {
-            int index = items.length - i - 1;
-            result[i] = items[index];
-        }
-        return result;
-    }
-
-    public PurchaseItem[] findById(int id) {
-        PurchaseItem[] result = repository.findById(id);
-        return result;
+    public Product search(int id) {
+        repository.findById(id);
+        return null;
     }
 
 }
